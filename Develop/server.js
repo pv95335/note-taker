@@ -18,18 +18,13 @@ const { db } = require("./db/db.json");
 
 // functions start
 
-function filterByQuery(query, notesArray) {
-  let titleArray = [];
-}
-
 function createNewNote(body, dbArray) {
   const note = body;
-  notesArray.push(note);
+  dbArray.push(note);
   fs.writeFileSync(
     path.join(__dirname, "./db/db.json"),
-    JSON.stringify({ notes: dbArray }, null, 2)
+    JSON.stringify({ db: dbArray }, null, 1)
   );
-
   return note;
 }
 
@@ -61,13 +56,14 @@ app.get("/api/notes/:id", (req, res) => {
 });
 
 // Post new information -------
-app.post("/api/notes", (req, res) => {
-  req.body.id = notes.length.toString();
+app.post("/api/db", (req, res) => {
+  req.body.id = db.length.toString();
 
+  const note = createNewNote(req.body, db);
   if (!validateNote(req.body)) {
     res.status(400).send("The note has not been saved.");
   } else {
-    const note = createNewNote(req.body, notes);
+    const note = createNewNote(req.body, db);
     res.json(note);
   }
 });
