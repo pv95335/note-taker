@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const express = require("express");
-
+// const index = require("./public/assets/js/index");
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -28,6 +28,11 @@ function createNewNote(body, dbArray) {
   return note;
 }
 
+function findById(id, dbArray) {
+  const result = dbArray.filter((db) => db.id === id)[0];
+  return result;
+}
+
 //functions end
 
 // get webpages to show on server
@@ -43,10 +48,11 @@ app.get("/notes", (req, res) => {
 // Merge both html pages together end -------
 
 // Get previous notes for page ---------
-app.get("/api/notes", (req, res) => {});
+app.get("/api/db", (req, res) => {});
 
 // Get responses by ID -------
 app.get("/api/notes/:id", (req, res) => {
+  res.json(db.filter());
   const result = findById(req.param.id, db);
   if (result) {
     res.json(result);
@@ -56,8 +62,8 @@ app.get("/api/notes/:id", (req, res) => {
 });
 
 // Post new information -------
-app.post("/api/db", (req, res) => {
-  req.body.id = db.length.toString();
+app.post("/api/notes", (req, res) => {
+  req.body.id = db.getNotes.toString();
 
   const note = createNewNote(req.body, db);
   if (!validateNote(req.body)) {
